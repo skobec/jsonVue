@@ -6,6 +6,7 @@
     <h2>TestBestFest</h2>
     <input placeholder="Введите" v-model="text"/>
     <p>sdsadas{{ text }}</p>
+    <p v-if="posts !== null">rererrrr</p>
     <button v-on:click="fetchData()">www</button>
     <p>{{ posts }}</p>
 
