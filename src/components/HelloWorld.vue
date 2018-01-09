@@ -7,11 +7,10 @@
     <input placeholder="Введите" v-model="text"/>
     <p>sdsadas{{ text }}</p>
     <p v-if="posts !== null">rererrrr</p>
+    {{cityName}}
+    <div v-show="loading">loading suka</div>
     <button v-on:click="fetchData()">www</button>
     <p>{{ posts }}</p>
-
-
-
   </div>
 </template>
 
@@ -22,26 +21,29 @@ export default {
     return {
       text: '',
       msg: 'Welcome to Your Vue.js App',
-      posts: null
+      posts: null,
+      loading: false
     }
   },
   mounted () {
     console.log('red')
+  },
+  computed: {
+    cityName () {
+      return this.$store.state.data.location ? this.$store.state.data.location.city : 'Хуй'
+    }
   },
   methods: {
     consoleClick () {
       console.log('click')
     },
     fetchData () {
-      let blogURL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22kazan%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
-      let xhr = new XMLHttpRequest()
-      let self = this
-      xhr.open('GET', blogURL)
-      xhr.onload = function () {
-        self.posts = JSON.parse(xhr.responseText)
-        console.log(self.posts)
-      }
-      xhr.send()
+      this.loading = true
+      this.$store.dispatch('getWeather')
+        .then(res => {
+          console.log('ok')
+          this.loading = false
+        })
     }
   }
 }
